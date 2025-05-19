@@ -1,8 +1,8 @@
 package stduy.querydsl;
 
 import static org.assertj.core.api.Assertions.*;
+import static stduy.querydsl.entity.QMember.*;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import stduy.querydsl.entity.Member;
-import stduy.querydsl.entity.QMember;
 import stduy.querydsl.entity.Team;
 
 @SpringBootTest
@@ -39,6 +38,8 @@ public class QuerydslBasicTest {
 		em.persist(member2);
 		em.persist(member3);
 		em.persist(member4);
+
+		queryFactory = new JPAQueryFactory(em);
 	}
 
 	@Test
@@ -57,18 +58,14 @@ public class QuerydslBasicTest {
 	@Test
 	public void startQuerydsl() throws Exception {
 	    // given
-		queryFactory = new JPAQueryFactory(em);
-		QMember m = new QMember("M");
-
 		// when
 		Member findMember = queryFactory
-			.select(m)
-			.from(m)
-			.where(m.username.eq("member1"))
+			.select(member)
+			.from(member)
+			.where(member.username.eq("member1"))
 			.fetchOne();
 
 	    // then
 		assertThat(findMember.getUsername()).isEqualTo("member1");
-
 	}
 }
