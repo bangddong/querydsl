@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.BooleanBuilder;
@@ -658,6 +659,62 @@ public class QuerydslBasicTest {
 
 	private BooleanExpression ageEq(Integer ageCond) {
 		return ageCond != null ? member.age.eq(ageCond) : null;
+	}
+
+	@Test
+	public void bulkUpdate() throws Exception {
+		// member1 = 10 -> DB member1
+		// member2 = 20 -> DB member2
+		// member3 = 30 -> DB member3
+		// member4 = 40 -> DB member4
+		long count = queryFactory
+			.update(member)
+			.set(member.username, "비회원")
+			.where(member.age.lt(28))
+			.execute();
+
+		// member1 = 10 -> DB 비회원
+		// member2 = 20 -> DB 비회원
+		// member3 = 30 -> DB member3
+		// member4 = 40 -> DB member4
+
+		List<Member> result = queryFactory
+			.selectFrom(member)
+			.fetch();
+
+		for (Member member1 : result) {
+			System.out.println("member1 = " + member1);
+		}
+	}
+
+	@Test
+	public void sqlFunction() throws Exception {
+		List<String> result = queryFactory
+			.select(Expressions.stringTemplate(
+				"function('replace', {0}, {1}, {2})",
+				member.username, "member", "M"
+			))
+			.from(member)
+			.fetch();
+
+		for (String s : result) {
+			System.out.println("s = " + s);
+		}
+	}
+
+	@Test
+	public void sqlFunction2() throws Exception {
+		List<String> result = queryFactory
+			.select(member.username)
+			.from(member)
+			// .where(member.username.eq(
+			// 	Expressions.stringTemplate("function('lower', {0})", member.username)))
+			.where(member.username.eq(member.username.lower()))
+			.fetch();
+
+		for (String s : result) {
+			System.out.println("s = " + s);
+		}
 	}
 
 }
