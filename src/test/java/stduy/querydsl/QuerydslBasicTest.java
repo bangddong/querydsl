@@ -9,14 +9,12 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -33,7 +31,6 @@ import stduy.querydsl.dto.QMemberDto;
 import stduy.querydsl.dto.UserDto;
 import stduy.querydsl.entity.Member;
 import stduy.querydsl.entity.QMember;
-import stduy.querydsl.entity.QTeam;
 import stduy.querydsl.entity.Team;
 
 @SpringBootTest
