@@ -659,6 +659,21 @@ public class QuerydslBasicTest {
 	}
 
 	@Test
+	public void sqlFunction() throws Exception {
+		List<String> result = queryFactory
+			.select(Expressions.stringTemplate(
+				"function('replace', {0}, {1}, {2})",
+				member.username, "member", "M"
+			))
+			.from(member)
+			.fetch();
+
+		for (String s : result) {
+			System.out.println("s = " + s);
+		}
+	}
+
+	@Test
 	public void bulkUpdate() throws Exception {
 		// member1 = 10 -> DB member1
 		// member2 = 20 -> DB member2
@@ -681,21 +696,6 @@ public class QuerydslBasicTest {
 
 		for (Member member1 : result) {
 			System.out.println("member1 = " + member1);
-		}
-	}
-
-	@Test
-	public void sqlFunction() throws Exception {
-		List<String> result = queryFactory
-			.select(Expressions.stringTemplate(
-				"function('replace', {0}, {1}, {2})",
-				member.username, "member", "M"
-			))
-			.from(member)
-			.fetch();
-
-		for (String s : result) {
-			System.out.println("s = " + s);
 		}
 	}
 

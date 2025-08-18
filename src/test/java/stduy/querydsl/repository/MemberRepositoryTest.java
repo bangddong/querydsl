@@ -18,38 +18,26 @@ import stduy.querydsl.entity.Team;
 
 @SpringBootTest
 @Transactional
-class MemberJpaRepositoryTest {
+class MemberRepositoryTest {
 
 	@Autowired
 	EntityManager em;
 
 	@Autowired
-	MemberJpaRepository memberJpaRepository;
+	MemberRepository memberRepository;
 
 	@Test
 	public void basicTest() throws Exception {
-	    Member member = new Member("member10", 10);
-		memberJpaRepository.save(member);
+		Member member = new Member("member10", 10);
+		memberRepository.save(member);
 
-		Member findMember = memberJpaRepository.findById(member.getId()).get();
+		Member findMember = memberRepository.findById(member.getId()).get();
 		assertEquals(member, findMember);
 
-		List<Member> result1 = memberJpaRepository.findAll();
+		List<Member> result1 = memberRepository.findAll();
 		assertThat(result1).containsExactly(member);
 
-		List<Member> result2 = memberJpaRepository.findByUserName("member10");
-		assertThat(result2).containsExactly(member);
-	}
-
-	@Test
-	public void basicQuerydslTest() throws Exception {
-		Member member = new Member("member10", 10);
-		memberJpaRepository.save(member);
-
-		List<Member> result1 = memberJpaRepository.findAll_Querydsl();
-		assertThat(result1).containsExactly(member);
-
-		List<Member> result2 = memberJpaRepository.findByUserName_Querydsl("member10");
+		List<Member> result2 = memberRepository.findByUsername("member10");
 		assertThat(result2).containsExactly(member);
 	}
 
@@ -74,8 +62,9 @@ class MemberJpaRepositoryTest {
 		condition.setAgeLoe(40);
 		condition.setTeamName("teamB");
 
-		List<MemberTeamDto> result = memberJpaRepository.search(condition);
+		List<MemberTeamDto> result = memberRepository.search(condition);
 
 		assertThat(result).extracting("username").containsExactly("member4");
 	}
+
 }
